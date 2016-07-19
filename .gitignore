@@ -1,12 +1,12 @@
 build/*
 bin/__pycache__/*
-uchicagoldrtoolsuite/*pyc
+uchicagoldrapicore/*pyc
 bin/*pyc
 bin/#*#
 bin/*#*
-uchicagoldrtoolsuite/#*$
-uchicagoldrtoolsuite/*#*
-uchicagoldrtoolsuite/*~
+uchicagoldrapicore/#*$
+uchicagoldrapicore/*#*
+uchicagoldrapicore/*~
 bin/*~
 #*#
 *~
