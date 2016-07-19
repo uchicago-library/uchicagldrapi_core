@@ -1,11 +1,10 @@
-from flask import session, g
-
-
 class UserLoader(object):
-    def __init__(self, UserClass):
+    def __init__(self, UserClass, token_signing_key=None):
         self.UserClass = UserClass
+        if token_signing_key:
+            self.UserClass.token_signing_key = token_signing_key
 
-    def load_user(self, request):
+    def load_user(self, request, session=None):
         """
         Function for use with the login_manager.user_loader callback.
 
@@ -27,14 +26,10 @@ class UserLoader(object):
             if request.get_json():
                 user, password = request.get_json().get('user'),  \
                     request.get_json().get('password')
-        # Then look in the session
         if user is None:
-            if session.get('user_token'):
-                user = session.get('user_token')
+            if session is not None:
+                user = session.get('user_token', None)
         if user is not None:
-            try:
-                g.user = self.UserClass(user, password)
-                return g.user
-            except:
-                return None
+            u = self.UserClass(user, password=password)
+            return u
         return None

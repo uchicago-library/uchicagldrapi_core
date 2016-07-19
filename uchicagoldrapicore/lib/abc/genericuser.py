@@ -4,7 +4,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer, BadSignature, \
 from hashlib import sha256
 
 
-class GenericUser(ABCMeta):
+class GenericUser(metaclass=ABCMeta):
 
     """
     An ABC for providing basic user login functionality to UChicagoLDR APIs
@@ -24,6 +24,7 @@ class GenericUser(ABCMeta):
     _is_authenticated = False
     _is_anonymous = True
 
+    @abstractmethod
     def __init__(self, id_or_token, password=None):
         # See if whats in id_or_token is a valid token
         validated = None

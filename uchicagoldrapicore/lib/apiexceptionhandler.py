@@ -1,3 +1,5 @@
+from ..responses.apiresponse import APIResponse
+
 class APIExceptionHandler(object):
     def __init__(self):
         pass
@@ -6,4 +8,6 @@ class APIExceptionHandler(object):
         # Placeholder
         if not isinstance(e, Exception):
             raise ValueError("The exception handler only handles exceptions.")
-        return {"Exception": str(e)}
+        fail_str = "({}): {}".format(str(type(e)), str(e))
+        return APIResponse("fail",
+                           errors = [fail_str])
