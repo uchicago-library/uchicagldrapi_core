@@ -11,11 +11,9 @@ class UserLoader(object):
         See https://flask-login.readthedocs.io/en/latest/ for more information.
 
         This implementation looks in a variety of places for either a token
-        or a username password combo, and will do two things on a successful
-        login via either.
+        or a username password combo
 
-        1) Set g.user to the User object
-        2) Return the user for use by flask_login
+        It fails silently on *any* error and returns None
         """
         # Try really hard to get the user out of where ever it could be
         # First look in the URL args, even though stuff probably shouldn't
@@ -26,10 +24,18 @@ class UserLoader(object):
             if request.get_json():
                 user, password = request.get_json().get('user'),  \
                     request.get_json().get('password')
+        # Then look in form data
+        if user is None:
+            user, password = request.form.get('user'), \
+                request.form.get('password')
+        # Then look in the session, if we have it
         if user is None:
             if session is not None:
                 user = session.get('user_token', None)
         if user is not None:
-            u = self.UserClass(user, password=password)
-            return u
+            try:
+                u = self.UserClass(user, password=password)
+                return u
+            except:
+                return None
         return None

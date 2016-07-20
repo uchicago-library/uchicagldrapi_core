@@ -1,3 +1,4 @@
+instance/
 build/*
 bin/__pycache__/*
 uchicagoldrapicore/*pyc

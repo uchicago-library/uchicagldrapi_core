@@ -1,9 +1,9 @@
-from flask import jsonify, make_response, session
-from flask_restufl import Resource, reqparse
+from flask import session, g, jsonify, make_response
 from flask_login import login_required
+from flask_restful import Resource
 
 from ..responses.apiresponse import APIResponse
-from .apiexceptionhandler import APIExceptionHandler
+from apiexceptionhandler import APIExceptionHandler
 
 _EXCEPTION_HANDLER = APIExceptionHandler()
 
@@ -23,21 +23,12 @@ class Login(Resource):
                                 </form>
                              </center>""")
 
+    @login_required
     def post(self):
-        # Generate a token (valid for default token lifespan) and set it in the
-        # session so that the user can stop passing credentials manually if they
-        # want
         try:
-            parser = reqparse.RequestParser()
-            parser.add_argument('user', type=str, required=True,
-                                location=['values', 'json', 'form'])
-            parser.add_argument('password', type=str,
-                                location=['values', 'json', 'form'])
-            args = parser.parse_args()
-            session['user_token'] = User(
-                args['user'],
-                password=args['password']
-            ).generate_token()
+            u = g.user
+            token = u.generate_token()
+            session['user_token'] = token
             return jsonify(APIResponse("success").dictify())
         except Exception as e:
             return jsonify(_EXCEPTION_HANDLER.handle(e).dictify())
@@ -55,4 +46,20 @@ class Logout(Resource):
                 APIResponse("success").dictify()
             )
         except Exception as e:
+            return jsonify(_EXCEPTION_HANDLER.handle(e).dictify())
+
+
+class GetToken(Resource):
+
+    method_decorators = [login_required]
+
+    def get(self):
+        # Generate a token for the user to use instead of their credentials
+        try:
+            t = g.user.generate_token()
+            return jsonify(
+                APIResponse("success", data={'token': t}).dictify()
+            )
+        except Exception as e:
+            raise e
             return jsonify(_EXCEPTION_HANDLER.handle(e).dictify())

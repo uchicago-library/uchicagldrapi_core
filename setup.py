@@ -22,6 +22,9 @@ setup(
         ]
     ),
     install_requires = [
-        "flask"
+        "flask",
+        "flask_restful",
+        "flask_login",
+        "itsdangerous"
     ]
 )
