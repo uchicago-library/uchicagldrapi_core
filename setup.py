@@ -26,5 +26,14 @@ setup(
         "flask_restful",
         "flask_login",
         "itsdangerous"
+    ],
+    entry_points = {
+        'console_scripts':[
+            'ldrapidebugserver = uchicagoldrapicore.bin.rundebugserver:main'
+        ]
+    },
+    include_package_data=True,
+    data_files = [
+        ('config', ['config.ini'])
     ]
 )
