@@ -34,6 +34,5 @@ for x in parser["CONFIG"]:
 try:
     from uchicagoldrhrapi.hr_api import bp as hr_bp
     app.register_blueprint(hr_bp)
-except Exception as e:
-    raise e
+except Exception:
     pass
