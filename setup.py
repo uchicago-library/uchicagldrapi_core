@@ -29,7 +29,8 @@ setup(
     ],
     entry_points = {
         'console_scripts':[
-            'ldrapidebugserver = uchicagoldrapicore.bin.rundebugserver:main'
+            'ldrapidebugserver = uchicagoldrapicore.bin.rundebugserver:main',
+            'makesecretkey = uchicagoldrapicore.bin.makesecretkey:main'
         ]
     },
     include_package_data=True,
